@@ -37,6 +37,7 @@ execute "load the mysql plist into the mac daemon startup thing" do
   not_if { system("launchctl list com.mysql.mysqld") }
 end
 
+=begin
 ruby_block "Checking that mysql is running" do
   block do
     Timeout::timeout(60) do
@@ -56,3 +57,4 @@ execute "insert time zone info" do
   command "mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -uroot -p#{DEFAULT_PIVOTAL_MYSQL_PASSWORD} mysql"
   not_if "mysql -uroot -p#{DEFAULT_PIVOTAL_MYSQL_PASSWORD} mysql -e 'select * from time_zone_name' | grep -q UTC"
 end
+=end
