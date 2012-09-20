@@ -1,4 +1,4 @@
-include_recipe "pivotal_workstation::rvm"
+include_recipe "pivotal_workstation::rbenv"
 include_recipe "pivotal_workstation::bash_profile-no_sudo_gem_install"
 include_recipe "pivotal_workstation::mysql"
 include_recipe "pivotal_workstation::postgres"

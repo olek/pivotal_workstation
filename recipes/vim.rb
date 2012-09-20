@@ -4,7 +4,7 @@
 include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::ack"
 include_recipe "pivotal_workstation::git"
-include_recipe "pivotal_workstation::rvm"
+include_recipe "pivotal_workstation::rbenv"
 include_recipe "pivotal_workstation::tmux"
 
 brew_install "mercurial"
@@ -31,7 +31,7 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
 
   execute "brew install macvim with system ruby" do
     user WS_USER
-    command "rvm use system; brew install macvim"
+    command "rbenv shell system; brew install macvim"
     not_if "brew list | grep '^macvim$'"
   end
 
@@ -82,7 +82,7 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
   execute "compile command-t" do
     only_if "test -d #{vim_dir}/bundle/command-t/ruby/command-t"
     cwd "#{node["vim_home"]}/bundle/command-t/ruby/command-t"
-    command "rvm use system; ruby extconf.rb && make clean && make"
+    command "rbenv shell system; ruby extconf.rb && make clean && make"
     user WS_USER
   end
 
