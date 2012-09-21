@@ -5,19 +5,11 @@ include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::ack"
 include_recipe "pivotal_workstation::git"
 include_recipe "pivotal_workstation::rbenv"
-include_recipe "pivotal_workstation::tmux"
-
-brew_install "mercurial"
 
 unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacVim.app") )
   execute "uninstall-vim" do
     command "brew uninstall vim"
     only_if "brew list | grep '^vim$'"
-  end
-
-  execute "install-vim" do
-    user WS_USER
-    command "brew install https://raw.github.com/Homebrew/homebrew-dupes/c93e84ace76c58ae2386c439040110b57e510f04/vim.rb"
   end
 
   execute "brew-uninstall-macvim" do
@@ -31,7 +23,12 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
 
   execute "brew install macvim with system ruby" do
     user WS_USER
-    command "rbenv shell system; brew install macvim"
+    # command "rbenv shell system; brew install macvim"
+    # well, technically speaking right now we need to also edit brew recepe to
+    # fix bug where no mvim windows will ever show up
+    # brew edit macvim
+    # and modify lines CC = nil to CC = 'clang'
+    command "brew install macvim --override-system-vim"
     not_if "brew list | grep '^macvim$'"
   end
 
@@ -53,52 +50,38 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
     end
   end
 
-  vim_dir = "#{WS_HOME}/.vim"
+  vim_home = node['vim_home']
+  janus_home = "#{WS_HOME}/.janus"
 
   execute "remove pre existing config" do
-    command "rm -rf #{vim_dir}"
+    command "rm -rf #{vim_home}"
   end
 
-  git node["vim_home"] do
-    repository node["vim_config_git"]
-    branch "master"
-    revision node["vim_hash"] || "HEAD"
-    action :sync
-    user WS_USER
-    enable_submodules true
-  end
+  [vim_home, janus_home].each do |dir|
+    execute "remove pre existing #{dir}" do
+      command "rm -rf #{dir}"
+    end
 
-  execute "verify-checkout-happened" do
-    command "test -e #{vim_dir}"
-  end
-
-  %w{vimrc gvimrc}.each do |vimrc|
-    link "#{WS_HOME}/.#{vimrc}" do
-      to "#{node["vim_home"]}/#{vimrc}"
-      owner WS_USER
+    directory dir do
+      user WS_USER
+      mode '0750'
+      action :create
     end
   end
 
-  execute "compile command-t" do
-    only_if "test -d #{vim_dir}/bundle/command-t/ruby/command-t"
-    cwd "#{node["vim_home"]}/bundle/command-t/ruby/command-t"
-    command "rbenv shell system; ruby extconf.rb && make clean && make"
-    user WS_USER
+  # Execute the Janus bootstrap installation from github.
+  execute "install janus for #{WS_USER}" do
+    cmd = "curl -Lo- http://bit.ly/janus-bootstrap | bash"
+    command %Q(sudo -H -u #{WS_USER} /bin/bash -c "#{cmd}")
+    creates "#{vim_home}/bootstrap.sh"
   end
 
-  execute "verify-that-command-t-is-correctly-compiled-for-vim" do
-    command %{test "`otool -l #{node["vim_home"]}/bundle/command-t/ruby/command-t/ext.bundle | grep libruby`" = "`otool -l /usr/local/bin/vim | grep libruby`"}
+  %w(jgdavey/tslime.vim olek/vim-turbux).each do |repo|
+    execute "clone #{repo} for #{WS_USER}" do
+      cmd = "cd #{janus_home} && git clone http://github.com/#{repo}.git"
+      command %Q(sudo -H -u #{WS_USER} /bin/bash -c "#{cmd}")
+      creates "#{janus_home}/#{repo.split('/').last}"
+    end
   end
 
-  execute "verify-that-command-t-is-correctly-compiled-for-mvim" do
-    command %{test "`otool -l #{node["vim_home"]}/bundle/command-t/ruby/command-t/ext.bundle | grep libruby`" = "`otool -l /Applications/MacVim.app/Contents/MacOS/Vim | grep libruby`"}
-  end
-
-  file "/Users/#{WS_USER}/.vimrc.local" do
-    action :touch
-    owner WS_USER
-  end
 end
-
-pivotal_workstation_bash_profile_include "vi_is_minimal_vim"
-pivotal_workstation_bash_profile_include "vim_tmux"

@@ -1,0 +1,15 @@
+set guifont=Menlo\ Regular:h13
+colo desertEx
+
+" Prevents last window from being accidentaly closed
+macm File.Close key=<nop>
+nnoremap <silent> <D-w> <Esc>:bd<CR>
+
+set guioptions-=m  "remove menu bar
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+
+let s:gvimrc_after_local = expand($HOME . '/.gvimrc.after.local')
+if filereadable(s:gvimrc_after_local)
+    exec ':so ' . s:gvimrc_after_local
+endif
