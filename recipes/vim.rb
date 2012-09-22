@@ -6,7 +6,7 @@ include_recipe "pivotal_workstation::ack"
 include_recipe "pivotal_workstation::git"
 include_recipe "pivotal_workstation::rbenv"
 
-unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacVim.app") )
+unless ( File.exists?("/usr/local/bin/mvim") and File.exists?("/Applications/MacVim.app") )
   execute "uninstall-vim" do
     command "brew uninstall vim"
     only_if "brew list | grep '^vim$'"
@@ -21,6 +21,24 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
     command "rm -rf /Applications/MacVim.app"
   end
 
+  execute "Install MacVim" do
+    version = 'MacVim-snapshot-64'
+    command(
+      %Q(cd #{Chef::Config[:file_cache_path]}/ && \
+          rm -fr #{version} && \
+          curl -L 'https://github.com/downloads/b4winckler/macvim/#{version}.tbz' | bzip2 -d | tar xf - && \
+          cd #{version} && \
+          mv MacVim.app /Applications
+          mv mvim /usr/local/bin
+          cd /usr/local/bin
+          ln -s mvim vim
+          ln -s mvim vi
+          chown -R #{WS_USER} /Applications/MacVim.app
+      ))
+    not_if {File.exists?("/Applications/MacVim.app")}
+  end
+
+=begin
   execute "brew install macvim with system ruby" do
     user WS_USER
     # command "rbenv shell system; brew install macvim"
@@ -44,6 +62,7 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
     end
   end
 
+=end
   ruby_block "test to see if MacVim link worked" do
     block do
       raise "/Applications/MacVim install failed" unless File.exists?("/Applications/MacVim.app")
@@ -53,19 +72,19 @@ unless ( File.exists?("/usr/local/bin/vim") and File.exists?("/Applications/MacV
   vim_home = node['vim_home']
   janus_home = "#{WS_HOME}/.janus"
 
-  execute "remove pre existing config" do
-    command "rm -rf #{vim_home}"
-  end
+  clean_configs = true
 
-  [vim_home, janus_home].each do |dir|
-    execute "remove pre existing #{dir}" do
-      command "rm -rf #{dir}"
-    end
+  if clean_configs
+    [vim_home, janus_home].each do |dir|
+      execute "remove pre existing #{dir}" do
+        command "rm -rf #{dir}"
+      end
 
-    directory dir do
-      user WS_USER
-      mode '0750'
-      action :create
+      directory dir do
+        user WS_USER
+        mode '0750'
+        action :create
+      end
     end
   end
 
