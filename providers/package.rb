@@ -61,7 +61,10 @@ action :install do
       execute "sudo installer -pkg '/Volumes/#{volumes_dir}/#{new_resource.app}.#{new_resource.type}' -target /"
     end
 
-    execute "hdiutil detach '/Volumes/#{volumes_dir}'"
+    execute "hdiutil detach '/Volumes/#{volumes_dir}'" do
+      retries 3
+      retry_delay 3
+    end
   end
 end
 
