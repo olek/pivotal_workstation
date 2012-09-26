@@ -23,7 +23,7 @@ run_unless_marker_file_exists("postgres") do
   if node["kernel"]["release"] == "12.0.0"
     brew_install("postgresql",:brew_args =>  "--without-ossp-uuid")
   else
-    brew_install "postgresql"
+    brew_install("postgresql",:brew_args =>  "--without-ossp-uuid")
   end
 
   execute "create the database" do
