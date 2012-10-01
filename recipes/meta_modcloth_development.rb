@@ -1,4 +1,5 @@
 include_recipe "pivotal_workstation::redis"
+include_recipe "pivotal_workstation::sequel_pro"
 include_recipe "pivotal_workstation::menubar_preferences"
 include_recipe "pivotal_workstation::truecrypt"
 
