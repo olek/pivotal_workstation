@@ -5,6 +5,7 @@ include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::ack"
 include_recipe "pivotal_workstation::git"
 include_recipe "pivotal_workstation::rbenv"
+include_recipe "pivotal_workstation::ctags"
 
 unless ( File.exists?("/usr/local/bin/mvim") and File.exists?("/Applications/MacVim.app") )
   execute "uninstall-vim" do
