@@ -1,6 +1,6 @@
 include_recipe "pivotal_workstation::workspace_directory"
 include_recipe "pivotal_workstation::git_config_global_defaults"
-include_recipe "pivotal_workstation::git_scripts"
+#include_recipe "pivotal_workstation::git_scripts"
 include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::gitx"
 include_recipe "pivotal_workstation::github_for_mac"
