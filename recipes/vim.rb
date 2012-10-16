@@ -7,6 +7,14 @@ include_recipe "pivotal_workstation::git"
 include_recipe "pivotal_workstation::rbenv"
 include_recipe "pivotal_workstation::ctags"
 
+%w(svim tvim).each do |script|
+  template "/usr/local/bin/#{script}" do
+    source "#{script}.erb"
+    user WS_USER
+    mode '0750'
+  end
+end
+
 unless ( File.exists?("/usr/local/bin/mvim") and File.exists?("/Applications/MacVim.app") )
   execute "uninstall-vim" do
     command "brew uninstall vim"
@@ -103,5 +111,4 @@ unless ( File.exists?("/usr/local/bin/mvim") and File.exists?("/Applications/Mac
       creates "#{janus_home}/#{repo.split('/').last}"
     end
   end
-
 end
