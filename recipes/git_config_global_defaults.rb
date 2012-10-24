@@ -10,7 +10,6 @@ template "#{WS_HOME}/.gitignore" do
 end
 
 git_configs = {
-  "alias.bf" => "branch-for-story",
   "alias.br" => "branch",
   "alias.bra" => "branch -a",
   "alias.ci" => "commit",
@@ -21,14 +20,12 @@ git_configs = {
   "alias.g" => "log --pretty=format:\"%h %an - %s\" --graph",
   "alias.gg" => "log --pretty=format:\"%H %an - %s\" --graph",
   "alias.lc" => "log ORIG_HEAD.. --stat --no-merges",
-  "alias.lg" => "log --oneline",
   "alias.ll" => "log --pretty=format:\"%Cred%h %Cblue%an %Cgreen%s / %Cblue%ar%Creset\" --abbrev-commit -n15",
-  "alias.pr" => "pull --rebase",
   "alias.st" => "status",
   "alias.s" => "status --short",
   "alias.w" => "whatchanged",
   "alias.pull-ff" => "pull --ff-only",
-  "alias.edit-unmerged" => "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; gvim `f`",
+  "alias.edit-unmerged" => "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; tvim `f`",
   "alias.add-unmerged" => "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`",
   "alias.down" => "!sh -c \"CURRENT=$(git symbolic-ref HEAD | sed -e s@.*/@@) && (git pull --ff-only || (git fetch origin && git rebase --preserve-merges origin/$CURRENT))\"",
   "alias.publish" => "!f() { if [ $# -ne 1 ]; then echo \"usage: git publish <local-branch-name>\" >&2; exit 1; fi; git push --set-upstream origin $1:$1; }; f",
@@ -39,15 +36,23 @@ git_configs = {
   "color.interactive" => "auto",
   "color.status" => "auto",
   "color.ui" => "true",
+  "color.grep" => "auto",
 
   "core.excludesfile" => "~/.gitignore",
 
-  "autosetup.rebase" => "true",
-  "autosetup.autosetuprebase" => "remote",
-  "autosetup.autosetupmerge" => "true",
-  "autosetup.mergeoptions" => "--no-commit --no-ff",
+  "branch.autosetuprebase" => "never",
+  "branch.autosetupmerge" => "true",
 
+  "apply.whitespace" => "fix",
+  "grep.lineNumber " => "true",
+  "pull.rebase" => "true",
   "push.default" => "current",
+
+  "diff.tool" => "diffmerge",
+  "difftool.diffmerge.cmd" => "diffmerge \"$LOCAL\" \"$REMOTE\"",
+  "merge.tool" => "diffmerge",
+  "mergetool.diffmerge.cmd" => "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\"",
+  "mergetool.diffmerge.trustExitCode" => "true",
 }
 
 git_configs.each do |k, v|
