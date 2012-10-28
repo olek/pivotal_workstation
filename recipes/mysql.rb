@@ -10,7 +10,7 @@ directory "/Users/#{WS_USER}/Library/LaunchAgents" do
   action :create
 end
 
-brew_install("mysql")
+# brew_install("mysql")
 
 ruby_block "copy mysql plist to ~/Library/LaunchAgents" do
   block do
