@@ -5,6 +5,7 @@ include_recipe "pivotal_workstation::truecrypt"
 include_recipe "pivotal_workstation::freetds"
 include_recipe "pivotal_workstation::diffmerge"
 include_recipe "pivotal_workstation::growl"
+include_recipe "pivotal_workstation::system_preferences"
 
 pivotal_workstation_bash_profile_include "modcloth"
 
