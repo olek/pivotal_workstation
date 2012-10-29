@@ -6,3 +6,8 @@ pivotal_workstation_package "TrueCrypt 7.1a" do
   accept_eula true
 end
 
+template "/Users/#{WS_USER}/Library/LaunchAgents/truecrypt.plist" do
+  source "truecrypt.plist.erb"
+  user WS_USER
+  mode '0640'
+end
