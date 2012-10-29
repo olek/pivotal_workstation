@@ -6,6 +6,7 @@ include_recipe "pivotal_workstation::freetds"
 include_recipe "pivotal_workstation::diffmerge"
 include_recipe "pivotal_workstation::growl"
 include_recipe "pivotal_workstation::system_preferences"
+include_recipe "pivotal_workstation::iterm"
 
 pivotal_workstation_bash_profile_include "modcloth"
 
