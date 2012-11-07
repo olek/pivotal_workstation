@@ -6,6 +6,7 @@ include_recipe "pivotal_workstation::git"
 
 brew_install("rbenv")
 brew_install("ruby-build")
+brew_install("rbenv-vars")
 
 pivotal_workstation_bash_profile_include "rbenv"
 

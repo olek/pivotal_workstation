@@ -1,7 +1,7 @@
 include_recipe "pivotal_workstation::git"
 pivotal_workstation_bash_profile_include "git_vim"
 
-template "#{WS_HOME}/.gitignore_global" do
+template "#{WS_HOME}/.gitignore" do
   source "gitignore_global.erb"
   owner WS_USER
   variables(
@@ -9,78 +9,56 @@ template "#{WS_HOME}/.gitignore_global" do
   )
 end
 
-execute "set global git ignore" do
-  command "git config --global core.excludesfile #{WS_HOME}/.gitignore_global"
-  user WS_USER
-  not_if "git config --global core.excludesfile | grep -q .gitignore_global"
-end
+git_configs = {
+  "alias.br" => "branch",
+  "alias.bra" => "branch -a",
+  "alias.ci" => "commit",
+  "alias.co" => "checkout",
+  "alias.cp" => "cherry-pick",
+  "alias.dc" => "diff --cached",
+  "alias.di" => "diff",
+  "alias.g" => "log --pretty=format:\"%h %an - %s\" --graph",
+  "alias.gg" => "log --pretty=format:\"%H %an - %s\" --graph",
+  "alias.lc" => "log ORIG_HEAD.. --stat --no-merges",
+  "alias.ll" => "log --pretty=format:\"%Cred%h %Cblue%an %Cgreen%s / %Cblue%ar%Creset\" --abbrev-commit -n15",
+  "alias.st" => "status",
+  "alias.s" => "status --short",
+  "alias.w" => "whatchanged",
+  "alias.pull-ff" => "pull --ff-only",
+  "alias.edit-unmerged" => "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; tvim `f`",
+  "alias.add-unmerged" => "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`",
+  "alias.down" => "!sh -c \"CURRENT=$(git symbolic-ref HEAD | sed -e s@.*/@@) && (git pull --ff-only || (git fetch origin && git rebase --preserve-merges origin/$CURRENT))\"",
+  "alias.publish" => "!f() { if [ $# -ne 1 ]; then echo \"usage: git publish <local-branch-name>\" >&2; exit 1; fi; git push --set-upstream origin $1:$1; }; f",
+  "alias.unpublish" => "!f() { if [ $# -ne 1 ]; then echo \"usage: git unpublish <remote-branch-name>\" >&2; exit 1; fi; git push origin :$1; }; f",
 
-execute "set alias st=status" do
-  command "git config --global alias.st status"
-  user WS_USER
-end
+  "color.branch" => "auto",
+  "color.diff" => "auto",
+  "color.interactive" => "auto",
+  "color.status" => "auto",
+  "color.ui" => "true",
+  "color.grep" => "auto",
 
-execute "set alias di=diff" do
-  command "git config --global alias.di diff"
-  user WS_USER
-end
+  "core.excludesfile" => "~/.gitignore",
 
-execute "set alias co=checkout" do
-  command "git config --global alias.co checkout"
-  user WS_USER
-end
+  "branch.autosetuprebase" => "never",
+  "branch.autosetupmerge" => "true",
 
-execute "set alias ci=commit" do
-  command "git config --global alias.ci commit"
-  user WS_USER
-end
+  "apply.whitespace" => "fix",
+  "grep.lineNumber " => "true",
+  "pull.rebase" => "true",
+  "push.default" => "current",
 
-execute "set alias br=branch" do
-  command "git config --global alias.br branch"
-  user WS_USER
-end
+  "diff.tool" => "diffmerge",
+  "difftool.diffmerge.cmd" => "diffmerge \"$LOCAL\" \"$REMOTE\"",
+  "merge.tool" => "diffmerge",
+  "mergetool.diffmerge.cmd" => "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\"",
+  "mergetool.diffmerge.trustExitCode" => "true",
+}
 
-execute "set alias sta=stash" do
-  command "git config --global alias.sta stash"
-  user WS_USER
-end
-
-execute "set alias llog=log --date=local" do
-  command "git config --replace-all --global alias.llog 'log --date=local'"
-  user WS_USER
-end
-
-execute "set apply whitespace=nowarn" do
-  command "git config --global apply.whitespace nowarn"
-  user WS_USER
-end
-
-execute "set color branch=auto" do
-  command "git config --global color.branch auto"
-  user WS_USER
-end
-
-execute "set color diff=auto" do
-  command "git config --global color.diff auto"
-  user WS_USER
-end
-
-execute "set color interactive=auto" do
-  command "git config --global color.interactive auto"
-  user WS_USER
-end
-
-execute "set color status=auto" do
-  command "git config --global color.status auto"
-  user WS_USER
-end
-
-execute "set color ui=auto" do
-  command "git config --global color.ui auto"
-  user WS_USER
-end
-
-execute "set branch autosetupmerge=true" do
-  command "git config --global branch.autosetupmerge true"
-  user WS_USER
+git_configs.each do |k, v|
+  execute "set global git config #{k}" do
+    command "git config --global #{k} \'#{v}\'"
+    user WS_USER
+    not_if "git config --global #{k} | grep -q \'#{v}\'"
+  end
 end
