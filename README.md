@@ -10,32 +10,7 @@ Pivotal Workstation is moving to using community cookbooks, and now depends on [
 # Fork information
 This is a fork of Pivotal Workstation, modified to suit environment at ModCloth.
 
-To use:
-
-    set -e
-    pushd `pwd`
-    time sudo gem install soloist --no-rdoc --no-ri
-
-    mkdir -p ~/cookbooks; cd ~/cookbooks
-    cat > soloistrc <<EOF
-    cookbook_paths:
-    - $PWD
-    recipes:
-    - pivotal_workstation::meta_osx_base
-    - pivotal_workstation::meta_osx_development
-    - pivotal_workstation::meta_ruby_development
-    - pivotal_workstation::meta_modcloth_development
-    EOF
-    if [[ -d pivotal_workstation ]]; then
-      cd opscode-cookbooks && git git pull --ff-only && cd ..
-      cd pivotal_workstation && git reset HEAD~33 --hard && git pull --ff-only && cd ..
-    else
-      git clone https://github.com/opscode-cookbooks/dmg
-      git clone https://github.com/olek/pivotal_workstation.git
-      cd pivotal_workstation && git checkout mlion && cd ..
-    fi
-    time soloist
-    popd
+To use, read/run script chefify.sh
 
 # Why?
 Development environments are very personal, yet pairing requires some standard be agreed upon.  Traditionally, Pivotal relied on imaging workstations from a gold master image which was updated as time allowed.  Creating an image that satisfies everyone is impossible, and creating one that satisfies most people is a time consuming process which happened when Apple happened to release hardware which was not compatible with the old image.  Chef and the Pivotal Workstation cookbook allows bringing up a new rails development environment with almost no effort, decide on standards on a per-project basis, then share changes with the rest of the users of the pivotal_workstation cookbook as time goes on.  Another motivation was to reduce the amount of time spent at standup discussing how to get xyz to compile/run/launch/work in development.
