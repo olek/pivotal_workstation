@@ -7,6 +7,7 @@ include_recipe "pivotal_workstation::diffmerge"
 include_recipe "pivotal_workstation::growl"
 include_recipe "pivotal_workstation::system_preferences"
 include_recipe "pivotal_workstation::iterm"
+include_recipe "pivotal_workstation::sizeup"
 
 pivotal_workstation_bash_profile_include "modcloth"
 
