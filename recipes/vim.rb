@@ -37,11 +37,11 @@ unless ( File.exists?("/usr/local/bin/mvim") and File.exists?("/Applications/Mac
           rm -fr #{version} && \
           curl -L 'https://github.com/downloads/b4winckler/macvim/#{version}.tbz' | bzip2 -d | tar xf - && \
           cd #{version} && \
-          mv MacVim.app /Applications
-          mv mvim /usr/local/bin
-          cd /usr/local/bin
-          ln -s mvim vim
-          ln -s mvim vi
+          mv MacVim.app /Applications && \
+          mv mvim /usr/local/bin && \
+          cd /usr/local/bin && \
+          ln -nfs mvim vim && \
+          ln -nfs mvim vi && \
           chown -R #{WS_USER} /Applications/MacVim.app
       ))
     not_if {File.exists?("/Applications/MacVim.app")}
