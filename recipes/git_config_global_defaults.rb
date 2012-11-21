@@ -53,6 +53,7 @@ git_configs = {
   "merge.tool" => "diffmerge",
   "mergetool.diffmerge.cmd" => "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\"",
   "mergetool.diffmerge.trustExitCode" => "true",
+  "mergetool.keepBackup" => "false"
 }
 
 git_configs.each do |k, v|
