@@ -1,5 +1,8 @@
 grep-src() { fgrep "$1" * -r $2 $3 $4 --exclude=*\.log ; }
 
+# makes git grep wrap long lines instead of cutting them short
+export LESS=FRX
+
 BREW_PREFIX=`brew --prefix`
 
 alias .g='source ~/.bash_profile'
