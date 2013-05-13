@@ -1,8 +1,10 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 dmg_package "Evernote" do
   volumes_dir "Evernote"
   source "http://evernote.com/download/get.php?file=EvernoteMac"
-  checksum "20bf4ac0ed5e0e3c80806a60b72c986f9407ccedcd5b763c88a0440ac11db9b6"
+  checksum "5639b8f5f6b5202a1d7e6cffd8ca2a4c11fd0c41f339466272aa7672abb8fd47"
   accept_eula true
-  # owner WS_USER
   action :install
+  owner WS_USER
 end

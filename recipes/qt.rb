@@ -1,4 +1,5 @@
-include_recipe "pivotal_workstation::homebrew"
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 include_recipe "pivotal_workstation::xquartz"
 
-brew_install "qt"
+brew "qt"

@@ -1,6 +1,7 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::increase_shared_memory"
-include_recipe "pivotal_workstation::user_owns_usr_local"
 
 run_unless_marker_file_exists("postgres") do
 
@@ -23,13 +24,13 @@ run_unless_marker_file_exists("postgres") do
     recursive true
   end
 
-  brew_install "postgresql"
+  brew "postgresql"
 
   execute "create the database" do
-    command "initdb -U postgres --encoding=utf8 --locale=en_US /usr/local/var/postgres"
+    command "/usr/local/bin/initdb -U postgres --encoding=utf8 --locale=en_US /usr/local/var/postgres"
     user WS_USER
   end
-  
+
   launch_agents_path = File.expand_path('.', File.join('~','Library', 'LaunchAgents'))
   directory launch_agents_path do
     action :create
@@ -55,7 +56,7 @@ run_unless_marker_file_exists("postgres") do
   end
 
   execute "create the database" do
-    command "createdb -U postgres"
+    command "/usr/local/bin/createdb -U postgres"
     user WS_USER
   end
   # "initdb /tmp/junk.$$" will fail unless you modify sysctl variables
@@ -64,13 +65,15 @@ run_unless_marker_file_exists("postgres") do
   #   kern.sysv.shmmax=16777216
 
   execute "create the postgres '#{WS_USER}' superuser" do
-    command "createuser -U postgres --superuser #{WS_USER}"
+    command "/usr/local/bin/createuser -U postgres --superuser #{WS_USER}"
     user WS_USER
   end
+
+  log "Make sure /usr/local/bin comes first in your PATH, else you will invoke the wrong psql and error with '...Domain socket \"/var/pgsql_socket/.s.PGSQL.5432\""
 end
 
 ruby_block "test to see if postgres is running" do
-block do
+  block do
     require 'socket'
     postgres_port = 5432
     begin
@@ -79,11 +82,9 @@ block do
       raise "postgres is not running: " << e
     end
     s.close
-    `sudo -u #{WS_USER} psql -U postgres < /dev/null`
+    `sudo -u #{WS_USER} /usr/local/bin/psql -U postgres < /dev/null`
     if $?.to_i != 0
       raise "I couldn't invoke postgres!"
     end
   end
 end
-
-

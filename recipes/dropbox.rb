@@ -1,7 +1,9 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 dmg_package "Dropbox" do
   volumes_dir "Dropbox Installer"
-  source "http://dl-web.dropbox.com/u/17/b/Dropbox%201.4.12.dmg"
-  checksum "367f18673cc27ab9266d70765e5c33f9cfd59f91028d18bd1188de52c9422cf3"
-  # owner WS_USER
+  source "https://www.dropbox.com/download?plat=mac"
+  checksum "1169d604ed3db8b15449753f7cf9c5af2b86afefcf598231d44dc29551c4a489"
   action :install
+  owner WS_USER
 end

@@ -1,7 +1,7 @@
-include_recipe "pivotal_workstation::homebrew"
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
 
 unless brew_installed? "memcached"
-  brew_install "memcached"
+  brew "memcached"
 
   directory "/Users/#{WS_USER}/Library/LaunchAgents" do
     owner WS_USER

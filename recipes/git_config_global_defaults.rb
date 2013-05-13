@@ -1,12 +1,12 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 include_recipe "pivotal_workstation::git"
-pivotal_workstation_bash_profile_include "git_vim"
+pivotal_workstation_bash_it_custom_plugin "git-export_editor.bash"
 
 template "#{WS_HOME}/.gitignore" do
   source "gitignore_global.erb"
   owner WS_USER
-  variables(
-    :ignore_idea => node[:git_global_ignore_idea]
-  )
+  variables(:ignore_idea => node[:git_global_ignore_idea])
 end
 
 git_configs = {
@@ -62,4 +62,9 @@ git_configs.each do |k, v|
     user WS_USER
     not_if "git config --global #{k} | grep -q \'#{v}\'"
   end
+end
+
+execute "set rebase autosquash=true" do
+  command "git config --global rebase.autosquash true"
+  user WS_USER
 end

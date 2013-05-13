@@ -1,9 +1,8 @@
-[![Build Status](https://secure.travis-ci.org/pivotal/pivotal_workstation.png)](http://travis-ci.org/pivotal/pivotal_workstation)
+# Warning
 
-Pivotal Workstation: A Repeatable, Documented, Decomposable, Shareable and Iterative OSX (ruby) Development Environment
+This git repository is deprecated. The pivotal_workstation cookbook is now [part of sprout](https://github.com/pivotal-sprout/sprout). Please submit [new issues](https://github.com/pivotal-sprout/sprout/issues) and [pull requests](https://github.com/pivotal-sprout/sprout/pulls) there.
 
-# NOTICE
-Pivotal Workstation is moving to using community cookbooks, and now depends on [opscode-cookbooks/dmg](https://github.com/opscode-cookbooks/dmg).  You will need to clone the dmg cookbook alongside pivotal_workstation.
+@hiremaga & @cunnie will ensure existing issues and pull requests are addressed as part of this migration. More information will follow in an official announcement in a few weeks.
 
 	cd ~/cookbooks; git clone https://github.com/opscode-cookbooks/dmg
 

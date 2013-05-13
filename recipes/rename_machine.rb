@@ -1,3 +1,5 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 hostnames=[`hostname`.chop]
 
 require 'socket'
@@ -13,7 +15,7 @@ end
 
 hostnames.each do |hostname|
   log "My hostname: #{hostname}"
-  if hostname =~ /pivotallabs.com/ and hostname !~ /^dyn-/
+  if hostname =~ /#{node['machine_domain']}/ and hostname !~ /^dyn-/
     hostname = hostname.gsub(/\..*/,"")
 
     # The scutil commands need to run as root, unless

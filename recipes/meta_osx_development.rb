@@ -1,4 +1,6 @@
-include_recipe "pivotal_workstation::bash_profile-git_completion"
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
+include_recipe "pivotal_workstation::bash_it"
 include_recipe "pivotal_workstation::ccmenu"
 include_recipe "pivotal_workstation::git_config_global_defaults"
 #include_recipe "pivotal_workstation::git_scripts"
@@ -14,5 +16,6 @@ include_recipe "pivotal_workstation::keycastr"
 include_recipe "pivotal_workstation::unix_essentials"
 include_recipe "pivotal_workstation::vagrant"
 include_recipe "pivotal_workstation::vim"
+include_recipe "pivotal_workstation::vim_config"
 include_recipe "pivotal_workstation::virtualbox"
 include_recipe "pivotal_workstation::workspace_directory"

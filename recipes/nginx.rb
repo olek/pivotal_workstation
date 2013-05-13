@@ -1,3 +1,5 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 include_recipe "pivotal_workstation::homebrew"
 include_recipe "pivotal_workstation::ssl_certificate"
 
@@ -8,7 +10,7 @@ run_unless_marker_file_exists("nginx") do
     command "sudo brew remove nginx"
   end
 
-  brew_install "nginx"
+  brew "nginx"
 
   plist_path = File.expand_path('org.nginx.nginx.plist', File.join('~', 'Library', 'LaunchAgents'))
   if File.exists?(plist_path)

@@ -1,3 +1,3 @@
-include_recipe "pivotal_workstation::homebrew"
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
 
-brew_install "chromedriver"
+brew "chromedriver"

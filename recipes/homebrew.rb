@@ -1,5 +1,9 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
+return unless node["platform"] == "mac_os_x"
+
 include_recipe "pivotal_workstation::user_owns_usr_local"
-include_recipe "pivotal_workstation::bash_path_order"
+include_recipe "pivotal_workstation::bash_it"
 
 homebrew_git_revision_hash  = version_string_for("homebrew")
 
@@ -27,6 +31,11 @@ end
 
 execute "Copying homebrew's .git to /usr/local" do
   command "rsync -axSH #{Chef::Config[:file_cache_path]}/homebrew/ /usr/local/"
+  user WS_USER
+end
+
+execute "Run git clean in /usr/local to clear out cruft after rsync" do
+  command "cd /usr/local; git clean -fd"
   user WS_USER
 end
 

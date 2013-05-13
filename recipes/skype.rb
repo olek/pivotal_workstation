@@ -1,6 +1,8 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 dmg_package "Skype" do
-  source "http://download.skype.com/macosx/Skype_6.0.0.2946.dmg"
-  checksum "98eb5f81f5f75c1d85e4ffee39ab36d58da5314d"
-  # owner WS_USER
+  source "http://download.skype.com/macosx/Skype_6.0.0.2968.dmg"
+  checksum "7f53dd799b7b99c70f6b62fde0cb74c4"
+  owner WS_USER
   action :install
 end

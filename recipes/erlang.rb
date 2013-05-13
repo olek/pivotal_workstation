@@ -1,1 +1,3 @@
-brew_install "erlang"
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
+brew "erlang"

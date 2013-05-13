@@ -1,3 +1,5 @@
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
+
 include_recipe "pivotal_workstation::virtualbox"
 
 dmg_package "Vagrant" do
@@ -5,5 +7,6 @@ dmg_package "Vagrant" do
   checksum "d9ccdd454389f5830a8218c066c8f54c15d9d32ca6060bc42677b495aad08003"
   action :install
   type "pkg"
+  owner WS_USER
   package_id "com.vagrant.vagrant"
 end

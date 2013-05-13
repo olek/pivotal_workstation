@@ -1,8 +1,7 @@
-unless system("git --version | grep 'git version' > /dev/null")
-  include_recipe "pivotal_workstation::homebrew"
+Chef::Log.warn 'Please use https://github.com/pivotal-sprout/sprout instead'
 
-  execute "brew install git" do
-    user WS_USER
-    command "brew install git"
-  end
+if node["platform"] != "mac_os_x"
+  package "git"
+else
+  brew "git"
 end
