@@ -9,9 +9,8 @@ include_recipe "pivotal_workstation::system_preferences"
 include_recipe "pivotal_workstation::iterm"
 include_recipe "pivotal_workstation::sizeup"
 
-# TODO find ways to reenable
-#pivotal_workstation_bash_profile_include "modcloth"
-#pivotal_workstation_bash_it_enable_feature "modcloth"
+pivotal_workstation_bash_it_custom_plugin "modcloth.bash"
+pivotal_workstation_bash_it_custom_plugin "better_history.bash"
 
 %w(vimrc.before vimrc.after gvimrc.after irbrc tmux.conf screenrc).each do |name|
   template "#{WS_HOME}/.#{name}" do

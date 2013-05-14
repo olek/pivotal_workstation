@@ -2,6 +2,8 @@ grep-src() { fgrep "$1" * -r $2 $3 $4 --exclude=*\.log ; }
 
 # makes git grep wrap long lines instead of cutting them short
 export LESS=FRX
+# cancels out bash-it customization that makes ls output directories in cyan instead of blue
+export LSCOLORS=''
 
 BREW_PREFIX=`brew --prefix`
 

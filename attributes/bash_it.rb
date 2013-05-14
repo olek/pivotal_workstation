@@ -12,7 +12,7 @@ node.default['bash_it'] ={
         bash_it/custom/add_user_initials_to_git_prompt_info.bash
       ]
   },
-  'theme' => 'bobby',
+  'theme' => 'sirup',
   'dir' => ::File.expand_path(".bash_it", WS_HOME),
   'bashrc_path' => ::File.expand_path(".bash_profile", WS_HOME),
   'repository' => 'http://github.com/revans/bash-it.git'
